@@ -106,16 +106,23 @@ Example: (one-key-local-create-menu :hook dired-mode-hook :key nil :bind \"?\")
        (defvar ,mapnm (when (and (boundp ,map)
                                  (keymapp (symbol-value ,map)))
                         (symbol-name ,map)))
-       (cond (,hook
-              (add-hook ,hook (lambda () (one-key-local--create-menu-sentinel ,key ,bind ,mapnm)) t))
-             ((functionp ,mode)
+       (cond ((and ,hook
+                   (symbolp ,hook))
+              (add-hook ,hook (lambda () (one-key-local--create-menu-sentinel ,key ,bind ,mapnm)) t)
+              t)
+             ((and ,mode
+                   (symbolp ,mode)
+                   (functionp ,mode))
               (ad-add-advice ,mode
                              (ad-make-advice 'one-key-local-define-help nil t
                                              '(advice lambda ()
                                                       (one-key-local--create-menu-sentinel ,key ,bind ,mapnm)))
                              'after
                              'last)
-              (ad-activate ,mode nil))))))
+              (ad-activate ,mode nil)
+              t)
+             (t
+              (message "[OneKeyLocal] Failed create menu"))))))
 
 (defun one-key-local--create-menu-sentinel (key bindkey mapnm &optional modestr)
   (condition-case e
