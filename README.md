@@ -89,7 +89,7 @@ Then, if you keystroke "&lt;f11&gt;" on dired-mode, display the following ...
 ![Demo1](demo1.png)
 
 Then, if you keystroke "C-t", show the "C-t" menu.  
-But, if you keystroke "<ESC>", not show the "<ESC>" menu.  
+But, if you keystroke "&lt;ESC&gt;", not show the "&lt;ESC&gt;" menu.  
 
 I guess the cause is specification of one-key.el.
 
