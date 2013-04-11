@@ -98,6 +98,7 @@ In above case, write like the following ...
 
     (one-key-local-create-menu :hook 'dired-mode-hook :key "<ESC>" :bind "<M-f11>")
 
+*Note* display the buffer of one-key.el by popwin.el in above screenshot.
 
 Tested On
 =========
