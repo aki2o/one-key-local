@@ -5,7 +5,7 @@
 ;; Author: Hiroaki Otsu <ootsuhiroaki@gmail.com>
 ;; Keywords: one-key
 ;; URL: https://github.com/aki2o/one-key-local
-;; Version: 0.1
+;; Version: 0.2.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -166,8 +166,25 @@ Example: (one-key-local-create-menu :hook dired-mode-hook :key nil :bind \"?\")
 (defun one-key-local--get-function-name (key &optional modestr)
   (let* ((modenm (replace-regexp-in-string "-mode" "" (or modestr
                                                           (symbol-name major-mode))))
-         (title (cond (key (concat modenm "-" (replace-regexp-in-string " " "-" key)))
-                      (t   modenm))))
+         (keynm (when key
+                  (loop with ret = key
+                        for e in '((" " . "-")
+                                   (";" . "semicolon")
+                                   ("'" . "singlequote")
+                                   ("\"" . "doublequote")
+                                   ("`" . "backquote")
+                                   ("(" . "lbrace")
+                                   (")" . "rbrace")
+                                   ("\\[" . "lbracket")
+                                   ("\\]" . "rbracket")
+                                   ("#" . "sharp")
+                                   ("\\\\" . "escape"))
+                        for before = (car e)
+                        for after = (cdr e)
+                        do (setq ret (replace-regexp-in-string before after ret))
+                        finally return ret)))
+         (title (cond (keynm (concat modenm "-" keynm))
+                      (t     modenm))))
     (concat "one-key-menu-" title)))
 
 (defun one-key-local--get-function-description (key &optional modestr)
